@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> 🧺 Laundry System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+<h1>Laundry Order System</h1>
+
+<section>
+    <h2>Create Order</h2>
+
+    <div class="form-row">
+        <input id="name" placeholder="Customer Name">
+        <input id="phone" placeholder="Phone Number">
+    </div>
+
+    <h3>Garments</h3>
+    <div id="itemsContainer"></div>
+
+    <div class="form-row">
+        <button class="secondary" onclick="addItem()">+ Add Item</button>
+        <button class="primary" onclick="createOrder()">Create Order</button>
+    </div>
+</section>
+
+<section>
+    <h2>Orders</h2>
+    <button class="primary" onclick="loadOrders()">View All Orders</button>
+
+    <table id="ordersTable">
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <h2>Dashboard</h2>
+    <button class="primary" onclick="loadDashboard()">Load Dashboard</button>
+    <div id="dashboard"></div>
+</section>
+
+
+<div id="orderPanel" class="panel">
+    <div class="panel-content">
+        <span class="close-btn" onclick="closePanel()">×</span>
+        <h2>Order Details</h2>
+        <div id="orderDetails"></div>
+    </div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
+
+<div id="toast" class="toast"></div>
+
+</body>
+</html>
