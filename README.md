@@ -9,7 +9,7 @@ The project was developed using an **AI-first approach**, leveraging tools like 
 
 ##  Features Implemented
 
-### 🧾 1. Create Order
+###  1. Create Order
 - Enter customer name & phone number
 - Add multiple garments dynamically
 - Select garment type (Shirt, Pants, Saree)
@@ -26,7 +26,7 @@ Each order supports:
 - READY
 - DELIVERED
 
-✔ Status can be updated directly from UI
+Status can be updated directly from UI
 
 ---
 
