@@ -1,8 +1,10 @@
-const BASE_URL = "http://127.0.0.1:5000";
-
+// Leave this empty so it uses relative paths on Vercel automatically
+const BASE_URL = "";
 
 window.onload = function () {
     addItem();
+    loadOrders();
+    loadDashboard();
 };
 
 // Add item row
@@ -75,18 +77,21 @@ function createOrder() {
         addItem();
 
         loadOrders();
+        loadDashboard();
     });
 }
 
 function showToast(message, type="success") {
     const toast = document.getElementById("toast");
 
-    toast.innerText = message;
-    toast.className = `toast show ${type}`;
+    if (toast) {
+        toast.innerText = message;
+        toast.className = `toast show ${type}`;
 
-    setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2500);
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2500);
+    }
 }
 
 // Load Orders
@@ -95,6 +100,7 @@ function loadOrders() {
     .then(res => res.json())
     .then(data => {
         let table = document.getElementById("ordersTable");
+        if (!table) return;
 
         table.innerHTML = `
         <tr>
@@ -130,7 +136,10 @@ function updateStatus(id, status) {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({status})
-    }).then(() => loadOrders());
+    }).then(() => {
+        loadOrders();
+        loadDashboard();
+    });
 }
 
 // View Order by ID
@@ -147,6 +156,8 @@ function viewOrderById(orderId) {
 function viewOrder(order) {
     const panel = document.getElementById("orderPanel");
     const details = document.getElementById("orderDetails");
+
+    if (!panel || !details) return;
 
     let itemsHTML = order.items.map(item => `
         <div class="item-box">
@@ -171,7 +182,8 @@ function viewOrder(order) {
 
 // Close panel
 function closePanel() {
-    document.getElementById("orderPanel").classList.remove("active");
+    const panel = document.getElementById("orderPanel");
+    if (panel) panel.classList.remove("active");
 }
 
 // Outside click close
@@ -179,7 +191,7 @@ window.addEventListener("click", function(event) {
     const panel = document.getElementById("orderPanel");
     const content = document.querySelector(".panel-content");
 
-    if (panel.classList.contains("active") && !content.contains(event.target)) {
+    if (panel && content && panel.classList.contains("active") && !content.contains(event.target)) {
         panel.classList.remove("active");
     }
 });
@@ -189,13 +201,15 @@ function loadDashboard() {
     fetch(`${BASE_URL}/dashboard`)
     .then(res => res.json())
     .then(data => {
+        const dashboard = document.getElementById("dashboard");
+        if (!dashboard) return;
 
         let statusHTML = Object.entries(data.status_counts)
             .map(([key, value]) => 
                 `<div class="status-card">${key}: ${value}</div>`
             ).join("");
 
-        document.getElementById("dashboard").innerHTML = `
+        dashboard.innerHTML = `
             <div class="dashboard-grid">
                 <div class="card">
                     <h3>Total Orders</h3>
@@ -217,6 +231,7 @@ function loadDashboard() {
         `;
     });
 }
+
 // PDF
 function downloadPDF(orderId) {
     const { jsPDF } = window.jspdf;
