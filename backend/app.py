@@ -1,7 +1,13 @@
-from flask import Flask, request, jsonify
+import os
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
-app = Flask(__name__)
+# Dynamically locate the frontend directory relative to backend/app.py
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend'))
+
+# Initialize Flask with the frontend directory configured for static assets
+app = Flask(__name__, static_folder=FRONTEND_DIR)
 CORS(app)
 
 # Default sample data to prevent empty/broken state in serverless execution
@@ -23,20 +29,26 @@ PRICE_LIST = {
     "Saree": 100
 }
 
-# Root Endpoint (Fixes 404 on home URL)
+
+# FRONTEND ROUTES
+
+
+# Serve the main index.html file on the root URL
 @app.route('/', methods=['GET'])
 def home():
-    return jsonify({
-        "status": "success",
-        "message": "Laundry System Backend API is running successfully!",
-        "endpoints": {
-            "GET /": "API Information",
-            "GET /orders": "Retrieve orders (query params: status, phone)",
-            "POST /orders": "Create a new order",
-            "PUT /orders/<id>/status": "Update order status",
-            "GET /dashboard": "Retrieve dashboard summary"
-        }
-    })
+    return send_from_directory(FRONTEND_DIR, 'index.html')
+
+# Serve static frontend files (styles.css, script.js, images, etc.)
+@app.route('/<path:path>', methods=['GET'])
+def serve_static(path):
+    file_path = os.path.join(FRONTEND_DIR, path)
+    if os.path.exists(file_path):
+        return send_from_directory(FRONTEND_DIR, path)
+    return jsonify({"error": "File not found"}), 404
+
+
+# BACKEND API ROUTES
+
 
 # Create Order
 @app.route('/orders', methods=['POST'])
