@@ -10,15 +10,19 @@
   },
   "rewrites": [
     {
-      "source": "/orders(.*)",
+      "source": "/orders",
       "destination": { "service": "my_backend" }
     },
     {
-      "source": "/dashboard(.*)",
+      "source": "/orders/:path*",
       "destination": { "service": "my_backend" }
     },
     {
-      "source": "/(.*)",
+      "source": "/dashboard",
+      "destination": { "service": "my_backend" }
+    },
+    {
+      "source": "/:path*",
       "destination": { "service": "my_frontend" }
     }
   ]
