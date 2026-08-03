@@ -1,7 +1,0 @@
-[project]
-name = "laundary-system"
-version = "0.1.0"
-dependencies = []
-
-[tool.vercel]
-entrypoint = "backend.app:app"
