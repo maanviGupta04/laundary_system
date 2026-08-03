@@ -1,27 +1,25 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "backend/app.py",
-      "use": "@vercel/python"
+  "services": {
+    "my_frontend": {
+      "root": "frontend/"
     },
-    {
-      "src": "frontend/**",
-      "use": "@vercel/static"
+    "my_backend": {
+      "root": "backend/",
+      "entrypoint": "app.py"
     }
-  ],
-  "routes": [
+  },
+  "rewrites": [
     {
-      "src": "/orders(.*)",
-      "dest": "backend/app.py"
+      "source": "/orders(.*)",
+      "destination": { "service": "my_backend" }
     },
     {
-      "src": "/dashboard(.*)",
-      "dest": "backend/app.py"
+      "source": "/dashboard(.*)",
+      "destination": { "service": "my_backend" }
     },
     {
-      "src": "/(.*)",
-      "dest": "frontend/$1"
+      "source": "/(.*)",
+      "destination": { "service": "my_frontend" }
     }
   ]
 }
